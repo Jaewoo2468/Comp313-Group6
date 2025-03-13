@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 function FilterSidebar({ activeFilters, toggleFilter }) {
   return (
@@ -14,10 +14,53 @@ function FilterSidebar({ activeFilters, toggleFilter }) {
           Fatal Car Accidents
         </label>
       </div>
-      {/* More filters will be added here */}
+
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={activeFilters.shootingIncidents}
+            onChange={() => toggleFilter("shootingIncidents")}
+          />
+          Shooting Incidents
+        </label>
+      </div>
+
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={activeFilters.homicides}
+            onChange={() => toggleFilter("homicides")}
+          />
+          Homicides
+        </label>
+      </div>
+
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={activeFilters.breakAndEnterIncidents} // Adding break and enter checkbox
+            onChange={() => toggleFilter("breakAndEnterIncidents")} // Updating to handle the new filter
+          />
+          Break and Enter Incidents
+        </label>
+      </div>
+
+      {/* Adding the Pedestrian KSI filter */}
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={activeFilters.pedestrianKSI}
+            onChange={() => toggleFilter("pedestrianKSI")}
+          />
+          Pedestrian KSI Incidents
+        </label>
+      </div>
     </div>
-  )
+  );
 }
 
-export default FilterSidebar
-
+export default FilterSidebar;

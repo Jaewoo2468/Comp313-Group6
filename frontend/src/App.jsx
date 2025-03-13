@@ -14,7 +14,11 @@ const client = new ApolloClient({
 
 function App() {
   const [activeFilters, setActiveFilters] = useState({
-    fatalAccidents: true,
+    fatalAccidents: false,
+    shootingIncidents: false,
+    homicides: false,
+    breakAndEnterIncidents: false,
+    pedestrianKSI: false,
   })
   const [isLoading, setIsLoading] = useState(false)
 
