@@ -7,6 +7,10 @@ const ShootingIncident = require("../models/ShootingIncidents");
 const Homicide = require("../models/Homicide");
 const BreakAndEnterIncident = require("../models/BreakAndEnter");
 const PedestrianKSI = require("../models/PedestrianKSI");
+<<<<<<< HEAD
+=======
+const Post = require("../models/Post");
+>>>>>>> a0ada4a (Initial commit on jaewoo branch)
 
 const resolvers = {
   Query: {
@@ -36,8 +40,13 @@ const resolvers = {
         const incidents = await ShootingIncident.find({});
         return incidents.map(incident => ({
           ...incident.toObject(),
+<<<<<<< HEAD
           DEATH: isNaN(incident.DEATH) ? String(incident.DEATH) : incident.DEATH, // Ensure DEATH is always a string
           INJURIES: isNaN(incident.INJURIES) ? String(incident.INJURIES) : incident.INJURIES, // Ensure INJURIES is always a string
+=======
+          DEATH: isNaN(incident.DEATH) ? String(incident.DEATH) : incident.DEATH,
+          INJURIES: isNaN(incident.INJURIES) ? String(incident.INJURIES) : incident.INJURIES,
+>>>>>>> a0ada4a (Initial commit on jaewoo branch)
         }));
       } catch (error) {
         console.error("Error fetching shooting incidents:", error);
@@ -114,6 +123,7 @@ const resolvers = {
         throw new Error("Error fetching pedestrian KSI incidents by neighborhood");
       }
     },
+<<<<<<< HEAD
   },
   Mutation: {
     // Register a new user
@@ -137,10 +147,50 @@ const resolvers = {
 
       await user.save();
       return user;  // Return the user object after it's saved
+=======
+
+    // Query for fetching all discussion board posts
+    discussionPosts: async () => {
+      try {
+        return await Post.find({}).populate("author");
+      } catch (error) {
+        console.error("Error fetching discussion posts:", error);
+        throw new Error("Error fetching discussion posts");
+      }
+    },
+  },
+
+  Mutation: {
+    // Register a new user
+    registerUser: async (_, { username, email, password, role }) => {
+      console.log("Received register request:", { username, email, password, role }); // 
+    
+      if (!username || !email || !password) {
+        throw new Error("All fields are required.");
+      }
+    
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        throw new Error("User already exists");
+      }
+    
+      const hashedPassword = await bcrypt.hash(password, 10);
+    
+      const user = new User({
+        username,
+        email,
+        password: hashedPassword,
+        role: role || "User",
+      });
+    
+      await user.save();
+      return user;
+>>>>>>> a0ada4a (Initial commit on jaewoo branch)
     },
 
     // Login user
     loginUser: async (_, { email, password }) => {
+<<<<<<< HEAD
       // Find the user by email
       const user = await User.findOne({ email });
       if (!user) {
@@ -160,6 +210,58 @@ const resolvers = {
       );
 
       return { token, user };  // Return JWT token and user details
+=======
+      console.log("Login attempt:", { email, password }); // 
+    
+      if (!email || !password) {
+        throw new Error("Email and password are required.");
+      }
+    
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new Error(`User with email ${email} not found.`);
+      }
+    
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        throw new Error("Incorrect password.");
+      }
+    
+      const token = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+    
+      return { token, user };
+    },
+
+    // Create a new discussion post
+    createPost: async (_, { content }, { user }) => {
+      console.log("Create post attempt by:", user); // 
+    
+      if (!user) {
+        throw new Error("Authentication required. Please log in.");
+      }
+    
+      if (!content || content.trim() === "") {
+        throw new Error("Post content cannot be empty.");
+      }
+    
+      try {
+        const newPost = new Post({
+          author: user.id,
+          content,
+          createdAt: new Date(),
+        });
+    
+        await newPost.save();
+        return await newPost.populate("author");
+      } catch (error) {
+        console.error("Error creating post:", error);
+        throw new Error("Error creating post. Please try again.");
+      }
+>>>>>>> a0ada4a (Initial commit on jaewoo branch)
     },
   },
 };

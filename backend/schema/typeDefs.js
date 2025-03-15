@@ -103,12 +103,26 @@ const typeDefs = `#graphql
     user: User!
   }
 
+<<<<<<< HEAD
+=======
+    type Post {
+    _id: ID!
+    author: User!
+    content: String!
+    createdAt: String!
+      }
+>>>>>>> a0ada4a (Initial commit on jaewoo branch)
 type Mutation {
   # Register a user
   registerUser(email: String!, password: String!, username: String!, role: String): User
 
   # Login a user
   loginUser(email: String!, password: String!): AuthPayload
+<<<<<<< HEAD
+=======
+  # Create a new discussion post
+    createPost(content: String!): Post
+>>>>>>> a0ada4a (Initial commit on jaewoo branch)
 }
 
 
@@ -128,6 +142,12 @@ type Mutation {
 
     pedestrianKSI: [PedestrianKSI]
     pedestrianKSIByNeighborhood(neighborhood: String): [PedestrianKSI]
+<<<<<<< HEAD
+=======
+
+      # Get all discussion posts
+    discussionPosts: [Post]
+>>>>>>> a0ada4a (Initial commit on jaewoo branch)
   }
 `;
 

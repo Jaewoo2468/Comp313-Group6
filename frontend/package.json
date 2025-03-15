@@ -11,6 +11,10 @@
   "dependencies": {
     "@apollo/client": "^3.8.0",
     "@react-google-maps/api": "^2.19.2",
+<<<<<<< HEAD
+=======
+    "bootstrap": "^5.3.3",
+>>>>>>> a0ada4a (Initial commit on jaewoo branch)
     "graphql": "^16.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
