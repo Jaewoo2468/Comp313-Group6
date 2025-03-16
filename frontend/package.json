@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.0",
+    "@clerk/clerk-react": "^5.24.2",
     "@react-google-maps/api": "^2.19.2",
     "graphql": "^16.8.0",
     "react": "^18.2.0",

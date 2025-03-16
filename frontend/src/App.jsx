@@ -7,26 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MapContainer from "./components/MapContainer";
 import FilterSidebar from "./components/FilterSidebar";
 import LoadingIndicator from "./components/LoadingIndicator";
-import Navbar from "./components/Navbar";
-
-// Create HTTP link
-const httpLink = createHttpLink({
-  uri: "http://localhost:5000/graphql",
-});
-
-// Create auth link
-const authLink = setContext((_, { headers }) => {
-  // Get the token from localStorage
-  const token = localStorage.getItem("token");
-  
-  // Return the headers to the context
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    }
-  };
-});
+import Navbar from "./components/Navbar"; // Import the Navbar component
 
 // Create Apollo Client
 const client = new ApolloClient({
@@ -90,22 +71,13 @@ function App() {
         <div style={{ display: "flex", flexDirection: "column", height: "100vh", position: "relative" }}>
           <Navbar />
           
-          <Routes>
-            <Route 
-              path="/" 
-              element={
-                <HomePage 
-                  activeFilters={activeFilters} 
-                  toggleFilter={toggleFilter}
-                  dateRange={dateRange}
-                  setDateRange={setDateRange}
-                  applyFilters={applyFilters}
-                  isLoading={isLoading} 
-                  setIsLoading={setIsLoading} 
-                />
-              } 
-            />
-          </Routes>
+          <div style={{ display: "flex", flex: 1 }}>
+            <FilterSidebar activeFilters={activeFilters} toggleFilter={toggleFilter} />
+            <MapContainer activeFilters={activeFilters} setIsLoading={setIsLoading} />
+          </div>
+
+          {/* Loading indicator will show when isLoading is true */}
+          {isLoading && <LoadingIndicator />}
         </div>
       </Router>
     </ApolloProvider>
