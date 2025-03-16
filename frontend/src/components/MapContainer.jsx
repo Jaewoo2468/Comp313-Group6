@@ -207,7 +207,6 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
   // Function to refetch all active queries with date range
   const refetchAllActiveQueries = useCallback(() => {
     console.log("Refetching all active queries with date range:", dateVariables)
-    setIsLoading(true)
 
     if (activeFilters.fatalAccidents) {
       refetchFatalAccidents({
