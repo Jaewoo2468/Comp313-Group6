@@ -307,9 +307,7 @@ function FilterSidebar({ activeFilters, toggleFilter, dateRange, setDateRange, a
             }}
           >
             <strong>Active Date Filter:</strong> {formatDateForDisplay(startDate)} to {formatDateForDisplay(endDate)}
-            <div style={{ fontSize: "11px", marginTop: "4px", color: "#666" }}>
-              Note: Dates in database are in MM/DD/YYYY format
-            </div>
+            
           </div>
         )}
       </div>

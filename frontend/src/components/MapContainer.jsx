@@ -42,6 +42,7 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
     breakAndEnterIncidents: 0,
     pedestrianKSI: 0,
   })
+  const [errors, setErrors] = useState({})
 
   // Prepare date variables for GraphQL queries
   const dateVariables = {
@@ -63,10 +64,12 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
     onCompleted: (data) => {
       console.log("Fatal accidents query completed:", data?.fatalAccidents?.length || 0, "results")
       setDataStats((prev) => ({ ...prev, fatalAccidents: data?.fatalAccidents?.length || 0 }))
+      setErrors((prev) => ({ ...prev, fatalAccidents: null }))
       setIsLoading(false)
     },
     onError: (error) => {
       console.error("Fatal accidents query error:", error)
+      setErrors((prev) => ({ ...prev, fatalAccidents: error.message }))
       setIsLoading(false)
     },
     fetchPolicy: "network-only", // Important: Don't use cache for date filtering
@@ -84,10 +87,12 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
     onCompleted: (data) => {
       console.log("Shooting incidents query completed:", data?.shootingIncidents?.length || 0, "results")
       setDataStats((prev) => ({ ...prev, shootingIncidents: data?.shootingIncidents?.length || 0 }))
+      setErrors((prev) => ({ ...prev, shootingIncidents: null }))
       setIsLoading(false)
     },
     onError: (error) => {
       console.error("Shooting incidents query error:", error)
+      setErrors((prev) => ({ ...prev, shootingIncidents: error.message }))
       setIsLoading(false)
     },
     fetchPolicy: "network-only",
@@ -105,10 +110,12 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
     onCompleted: (data) => {
       console.log("Homicides query completed:", data?.homicides?.length || 0, "results")
       setDataStats((prev) => ({ ...prev, homicides: data?.homicides?.length || 0 }))
+      setErrors((prev) => ({ ...prev, homicides: null }))
       setIsLoading(false)
     },
     onError: (error) => {
       console.error("Homicides query error:", error)
+      setErrors((prev) => ({ ...prev, homicides: error.message }))
       setIsLoading(false)
     },
     fetchPolicy: "network-only",
@@ -126,13 +133,28 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
     onCompleted: (data) => {
       console.log("Break and enter query completed:", data?.breakAndEnterIncidents?.length || 0, "results")
       setDataStats((prev) => ({ ...prev, breakAndEnterIncidents: data?.breakAndEnterIncidents?.length || 0 }))
+      setErrors((prev) => ({ ...prev, breakAndEnterIncidents: null }))
       setIsLoading(false)
     },
     onError: (error) => {
       console.error("Break and enter query error:", error)
+      setErrors((prev) => ({
+        ...prev,
+        breakAndEnterIncidents: `${error.message}. Try removing date filters or refreshing the page.`,
+      }))
       setIsLoading(false)
+
+      // If we get a 400 error, we'll still try to show any cached data
+      if (breakAndEnterData?.breakAndEnterIncidents) {
+        console.log("Using cached break and enter data despite error")
+        setDataStats((prev) => ({
+          ...prev,
+          breakAndEnterIncidents: breakAndEnterData.breakAndEnterIncidents.length,
+        }))
+      }
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network", // Try to use cache if network request fails
+    errorPolicy: "all", // Continue and return partial results on error
   })
 
   // Query pedestrian KSI data with date range
@@ -147,10 +169,12 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
     onCompleted: (data) => {
       console.log("Pedestrian KSI query completed:", data?.pedestrianKSI?.length || 0, "results")
       setDataStats((prev) => ({ ...prev, pedestrianKSI: data?.pedestrianKSI?.length || 0 }))
+      setErrors((prev) => ({ ...prev, pedestrianKSI: null }))
       setIsLoading(false)
     },
     onError: (error) => {
       console.error("Pedestrian KSI query error:", error)
+      setErrors((prev) => ({ ...prev, pedestrianKSI: error.message }))
       setIsLoading(false)
     },
     fetchPolicy: "network-only",
@@ -183,34 +207,56 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
   // Function to refetch all active queries with date range
   const refetchAllActiveQueries = useCallback(() => {
     console.log("Refetching all active queries with date range:", dateVariables)
+    setIsLoading(true)
 
     if (activeFilters.fatalAccidents) {
       refetchFatalAccidents({
         variables: dateVariables,
+      }).catch((error) => {
+        console.error("Error refetching fatal accidents:", error)
+        setErrors((prev) => ({ ...prev, fatalAccidents: error.message }))
+        setIsLoading(false)
       })
     }
 
     if (activeFilters.shootingIncidents) {
       refetchShootingIncidents({
         variables: dateVariables,
+      }).catch((error) => {
+        console.error("Error refetching shooting incidents:", error)
+        setErrors((prev) => ({ ...prev, shootingIncidents: error.message }))
+        setIsLoading(false)
       })
     }
 
     if (activeFilters.homicides) {
       refetchHomicides({
         variables: dateVariables,
+      }).catch((error) => {
+        console.error("Error refetching homicides:", error)
+        setErrors((prev) => ({ ...prev, homicides: error.message }))
+        setIsLoading(false)
       })
     }
 
     if (activeFilters.breakAndEnterIncidents) {
+      console.log("Attempting to refetch break and enter incidents...")
       refetchBreakAndEnter({
         variables: dateVariables,
+      }).catch((error) => {
+        console.error("Error refetching break and enter incidents:", error)
+        setErrors((prev) => ({ ...prev, breakAndEnterIncidents: `${error.message}. Try removing date filters.` }))
+        setIsLoading(false)
       })
     }
 
     if (activeFilters.pedestrianKSI) {
       refetchPedestrianKSI({
         variables: dateVariables,
+      }).catch((error) => {
+        console.error("Error refetching pedestrian KSI incidents:", error)
+        setErrors((prev) => ({ ...prev, pedestrianKSI: error.message }))
+        setIsLoading(false)
       })
     }
   }, [
@@ -220,6 +266,7 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
     refetchHomicides,
     refetchBreakAndEnter,
     refetchPedestrianKSI,
+    setIsLoading,
   ])
 
   // Effect to refetch data when date range or active filters change
@@ -350,6 +397,35 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
 
   return (
     <div style={{ flex: 1, position: "relative" }}>
+      {/* Error messages */}
+      {Object.entries(errors).some(([key, error]) => error && activeFilters[key]) && (
+        <div
+          style={{
+            position: "absolute",
+            top: "10px",
+            left: "10px",
+            zIndex: 1000,
+            backgroundColor: "rgba(255, 220, 220, 0.95)",
+            padding: "10px 15px",
+            borderRadius: "4px",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+            fontSize: "14px",
+            maxWidth: "400px",
+          }}
+        >
+          <div style={{ fontWeight: "bold", marginBottom: "6px", color: "#d32f2f" }}>Error loading data:</div>
+          <ul style={{ margin: "0", paddingLeft: "20px" }}>
+            {Object.entries(errors).map(([key, error]) =>
+              error && activeFilters[key] ? (
+                <li key={key} style={{ marginBottom: "4px" }}>
+                  {key.replace(/([A-Z])/g, " $1").trim()}: {error}
+                </li>
+              ) : null,
+            )}
+          </ul>
+        </div>
+      )}
+
       {/* Date filter info overlay */}
       {(dateRange.startDate || dateRange.endDate) && (
         <div
