@@ -417,6 +417,7 @@ const resolvers = {
         throw new Error(`Error registering user: ${error.message}`)
       }
     },
+    // Update the login resolver to include the user ID in the token
     login: async (_, { email, password }) => {
       try {
         // Find user by email
@@ -435,7 +436,7 @@ const resolvers = {
         const token = jwt.sign(
           { id: user._id, email: user.email, role: user.role },
           process.env.JWT_SECRET || "your-secret-key",
-          { expiresIn: "1d" },
+          { expiresIn: "7d" }, // Extended token expiration to 7 days
         )
 
         return {
