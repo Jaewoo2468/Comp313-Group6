@@ -24,4 +24,4 @@ const shootingIncidentSchema = new mongoose.Schema({
   y: Number,  // Latitude
 });
 
-module.exports = mongoose.model('ShootingIncident', shootingIncidentSchema, 'ShootingIncidents');
+module.exports = mongoose.model('ShootingIncident', shootingIncidentSchema, 'ShootingIncident');

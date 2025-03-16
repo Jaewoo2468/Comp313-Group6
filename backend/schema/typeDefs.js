@@ -2,15 +2,20 @@ const typeDefs = `#graphql
   type FatalAccident {
     _id: ID
     OBJECTID: Int
-    LATITUDE: Float
-    LONGITUDE: Float
+    INDEX: Int
+    ACCNUM: Int
     DATE: String
     TIME: Int
     STREET1: String
     STREET2: String
+    ROAD_CLASS: String
     DISTRICT: String
-    RDSFCOND: String
+    LATITUDE: Float
+    LONGITUDE: Float
+    TRAFFCTL: String
+    VISIBILITY: String
     LIGHT: String
+    RDSFCOND: String
     ACCLASS: String
     IMPACTYPE: String
     INVTYPE: String
@@ -21,33 +26,42 @@ const typeDefs = `#graphql
     MANOEUVER: String
     DRIVACT: String
     DRIVCOND: String
-    VISIBILITY: String
+    AUTOMOBILE: String
+    HOOD_158: Int
+    NEIGHBOURHOOD_158: String
+    HOOD_140: Int
+    NEIGHBOURHOOD_140: String
+    DIVISION: String
+    x: Float
+    y: Float
   }
 
   type ShootingIncident {
     _id: ID
-    EVENT_UNIQUE_ID: String
-    OCC_DATE: String
-    DIVISION: String
-    DEATH: String
-    INJURIES: String
-    LAT_WGS84: Float
-    LONG_WGS84: Float
-  }
-
-  type Homicide {
-    _id: ID
     OBJECTID: Int
     EVENT_UNIQUE_ID: String
     OCC_DATE: String
+    OCC_YEAR: Int
+    OCC_MONTH: String
+    OCC_DOW: String
+    OCC_DOY: Int
+    OCC_DAY: Int
+    OCC_HOUR: Int
+    OCC_TIME_RANGE: String
     DIVISION: String
     DEATH: String
     INJURIES: String
-    LAT_WGS84: Float
+    HOOD_158: String
+    NEIGHBOURHOOD_158: String
+    HOOD_140: String
+    NEIGHBOURHOOD_140: String
     LONG_WGS84: Float
+    LAT_WGS84: Float
+    x: Float
+    y: Float
   }
 
-  type BreakAndEnterIncident {
+  type Homicide {
     _id: ID
     OBJECTID: Int
     EVENT_UNIQUE_ID: String
@@ -59,14 +73,38 @@ const typeDefs = `#graphql
     OCC_DAY: Int
     OCC_HOUR: Int
     DIVISION: String
-    LOCATION_TYPE: String
-    UCR_CODE: Int
-    UCR_EXT: Int
-    OFFENCE: String
     DEATH: String
     INJURIES: String
     LAT_WGS84: Float
     LONG_WGS84: Float
+    x: Float
+    y: Float
+  }
+
+  type BreakAndEnterIncident {
+    _id: ID
+    OBJECTID: Int
+    EVENT_UNIQUE_ID: String
+    REPORT_DATE: String
+    OCC_DATE: String
+    OCC_YEAR: Int
+    OCC_MONTH: String
+    OCC_DAY: Int
+    OCC_DOW: String
+    OCC_HOUR: Int
+    DIVISION: String
+    LOCATION_TYPE: String
+    PREMISES_TYPE: String
+    UCR_CODE: Int
+    UCR_EXT: Int
+    OFFENCE: String
+    MCI_CATEGORY: String
+    HOOD_158: Int
+    NEIGHBOURHOOD_158: String
+    HOOD_140: Int
+    NEIGHBOURHOOD_140: String
+    LONG_WGS84: Float
+    LAT_WGS84: Float
     x: Float
     y: Float
   }
@@ -92,43 +130,49 @@ const typeDefs = `#graphql
   }
 
   type User {
-    _id: ID!
-    username: String!  # Added username field
-    email: String!
-    role: String!
+    _id: ID
+    username: String
+    email: String
+    role: String
+    createdAt: String
   }
 
   type AuthPayload {
-    token: String!
-    user: User!
+    token: String
+    user: User
   }
-
-type Mutation {
-  # Register a user
-  registerUser(email: String!, password: String!, username: String!, role: String): User
-
-  # Login a user
-  loginUser(email: String!, password: String!): AuthPayload
-}
-
-
 
   type Query {
-    fatalAccidents: [FatalAccident]
-    fatalAccidentsByDistrict(district: String): [FatalAccident]
-
-    shootingIncidents: [ShootingIncident]
-    shootingIncidentsByDivision(division: String): [ShootingIncident]
-
-    homicides: [Homicide]
-    homicidesByDivision(division: String): [Homicide]
-
-    breakAndEnterIncidents: [BreakAndEnterIncident]
-    breakAndEnterIncidentsByNeighborhood(neighborhood: String): [BreakAndEnterIncident]
-
-    pedestrianKSI: [PedestrianKSI]
-    pedestrianKSIByNeighborhood(neighborhood: String): [PedestrianKSI]
+    # Fatal Accidents
+    fatalAccidents(startDate: String, endDate: String): [FatalAccident]
+    fatalAccidentsByDistrict(district: String!, startDate: String, endDate: String): [FatalAccident]
+    
+    # Shooting Incidents
+    shootingIncidents(startDate: String, endDate: String): [ShootingIncident]
+    shootingIncidentsByDivision(division: String!, startDate: String, endDate: String): [ShootingIncident]
+    
+    # Homicides
+    homicides(startDate: String, endDate: String): [Homicide]
+    homicidesByDivision(division: String!, startDate: String, endDate: String): [Homicide]
+    
+    # Break and Enter Incidents
+    breakAndEnterIncidents(startDate: String, endDate: String): [BreakAndEnterIncident]
+    breakAndEnterIncidentsByNeighborhood(neighborhood: String!, startDate: String, endDate: String): [BreakAndEnterIncident]
+    
+    # Pedestrian KSI
+    pedestrianKSI(startDate: String, endDate: String): [PedestrianKSI]
+    pedestrianKSIByNeighborhood(neighborhood: String!, startDate: String, endDate: String): [PedestrianKSI]
+    
+    # User
+    me: User
   }
-`;
 
-module.exports = { typeDefs };
+  type Mutation {
+    # User Authentication
+    register(username: String!, email: String!, password: String!): AuthPayload
+    login(email: String!, password: String!): AuthPayload
+  }
+`
+
+module.exports = { typeDefs }
+

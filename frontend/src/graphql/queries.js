@@ -1,9 +1,9 @@
 import { gql } from "@apollo/client";
 
-// Get all fatal accidents
+// Get all fatal accidents with optional date filtering
 export const GET_FATAL_ACCIDENTS = gql`
-  query GetFatalAccidents {
-    fatalAccidents {
+  query GetFatalAccidents($startDate: String, $endDate: String) {
+    fatalAccidents(startDate: $startDate, endDate: $endDate) {
       _id
       OBJECTID
       LATITUDE
@@ -30,10 +30,10 @@ export const GET_FATAL_ACCIDENTS = gql`
   }
 `;
 
-// Get fatal accidents by district
+// Get fatal accidents by district with optional date filtering
 export const GET_FATAL_ACCIDENTS_BY_DISTRICT = gql`
-  query GetFatalAccidentsByDistrict($district: String!) {
-    fatalAccidentsByDistrict(district: $district) {
+  query GetFatalAccidentsByDistrict($district: String!, $startDate: String, $endDate: String) {
+    fatalAccidentsByDistrict(district: $district, startDate: $startDate, endDate: $endDate) {
       _id
       OBJECTID
       LATITUDE
@@ -60,10 +60,10 @@ export const GET_FATAL_ACCIDENTS_BY_DISTRICT = gql`
   }
 `;
 
-// Get all shooting incidents
+// Get all shooting incidents with optional date filtering
 export const GET_SHOOTING_INCIDENTS = gql`
-  query GetShootingIncidents {
-    shootingIncidents {
+  query GetShootingIncidents($startDate: String, $endDate: String) {
+    shootingIncidents(startDate: $startDate, endDate: $endDate) {
       _id
       EVENT_UNIQUE_ID
       OCC_DATE
@@ -76,10 +76,10 @@ export const GET_SHOOTING_INCIDENTS = gql`
   }
 `;
 
-// Get shooting incidents by division
+// Get shooting incidents by division with optional date filtering
 export const GET_SHOOTING_INCIDENTS_BY_DIVISION = gql`
-  query GetShootingIncidentsByDivision($division: String!) {
-    shootingIncidentsByDivision(division: $division) {
+  query GetShootingIncidentsByDivision($division: String!, $startDate: String, $endDate: String) {
+    shootingIncidentsByDivision(division: $division, startDate: $startDate, endDate: $endDate) {
       _id
       EVENT_UNIQUE_ID
       OCC_DATE
@@ -92,9 +92,10 @@ export const GET_SHOOTING_INCIDENTS_BY_DIVISION = gql`
   }
 `;
 
+// Get all homicides with optional date filtering
 export const GET_HOMICIDES = gql`
-  query GetHomicides {
-    homicides {
+  query GetHomicides($startDate: String, $endDate: String) {
+    homicides(startDate: $startDate, endDate: $endDate) {
       _id
       OBJECTID
       EVENT_UNIQUE_ID
@@ -108,10 +109,10 @@ export const GET_HOMICIDES = gql`
   }
 `;
 
-// Get homicides by division
+// Get homicides by division with optional date filtering
 export const GET_HOMICIDES_BY_DIVISION = gql`
-  query GetHomicidesByDivision($division: String!) {
-    homicidesByDivision(division: $division) {
+  query GetHomicidesByDivision($division: String!, $startDate: String, $endDate: String) {
+    homicidesByDivision(division: $division, startDate: $startDate, endDate: $endDate) {
       _id
       OBJECTID
       EVENT_UNIQUE_ID
@@ -125,10 +126,10 @@ export const GET_HOMICIDES_BY_DIVISION = gql`
   }
 `;
 
-// Get all break and enter incidents
+// Get all break and enter incidents with optional date filtering
 export const GET_BREAK_AND_ENTER_INCIDENTS = gql`
-  query GetBreakAndEnterIncidents {
-    breakAndEnterIncidents {
+  query GetBreakAndEnterIncidents($startDate: String, $endDate: String) {
+    breakAndEnterIncidents(startDate: $startDate, endDate: $endDate) {
       _id
       OBJECTID
       EVENT_UNIQUE_ID
@@ -154,10 +155,10 @@ export const GET_BREAK_AND_ENTER_INCIDENTS = gql`
   }
 `;
 
-// Get break and enter incidents by neighborhood
+// Get break and enter incidents by neighborhood with optional date filtering
 export const GET_BREAK_AND_ENTER_INCIDENTS_BY_NEIGHBORHOOD = gql`
-  query GetBreakAndEnterIncidentsByNeighborhood($neighborhood: String!) {
-    breakAndEnterIncidentsByNeighborhood(neighborhood: $neighborhood) {
+  query GetBreakAndEnterIncidentsByNeighborhood($neighborhood: String!, $startDate: String, $endDate: String) {
+    breakAndEnterIncidentsByNeighborhood(neighborhood: $neighborhood, startDate: $startDate, endDate: $endDate) {
       _id
       OBJECTID
       EVENT_UNIQUE_ID
@@ -183,10 +184,10 @@ export const GET_BREAK_AND_ENTER_INCIDENTS_BY_NEIGHBORHOOD = gql`
   }
 `;
 
-// Get all pedestrian KSI incidents
+// Get all pedestrian KSI incidents with optional date filtering
 export const GET_PEDESTRIAN_KSI = gql`
-  query GetPedestrianKSI {
-    pedestrianKSI {
+  query GetPedestrianKSI($startDate: String, $endDate: String) {
+    pedestrianKSI(startDate: $startDate, endDate: $endDate) {
       _id
       OBJECTID
       DATE
@@ -208,10 +209,10 @@ export const GET_PEDESTRIAN_KSI = gql`
   }
 `;
 
-// Get pedestrian KSI incidents by neighborhood
+// Get pedestrian KSI incidents by neighborhood with optional date filtering
 export const GET_PEDESTRIAN_KSI_BY_NEIGHBORHOOD = gql`
-  query GetPedestrianKSIByNeighborhood($neighborhood: String!) {
-    pedestrianKSIByNeighborhood(neighborhood: $neighborhood) {
+  query GetPedestrianKSIByNeighborhood($neighborhood: String!, $startDate: String, $endDate: String) {
+    pedestrianKSIByNeighborhood(neighborhood: $neighborhood, startDate: $startDate, endDate: $endDate) {
       _id
       OBJECTID
       DATE
