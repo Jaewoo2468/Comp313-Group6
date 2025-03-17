@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react"
 
-function FilterSidebar({ activeFilters, toggleFilter, dateRange, setDateRange, applyFilters }) {
+function FilterSidebar({
+  activeFilters = {},
+  toggleFilter = () => {},
+  dateRange = { startDate: "", endDate: "" },
+  setDateRange = () => {},
+  applyFilters = () => {},
+}) {
   const [startDate, setStartDate] = useState(dateRange.startDate || "")
   const [endDate, setEndDate] = useState(dateRange.endDate || "")
   const [isDateFilterActive, setIsDateFilterActive] = useState(!!dateRange.startDate || !!dateRange.endDate)
@@ -80,7 +86,7 @@ function FilterSidebar({ activeFilters, toggleFilter, dateRange, setDateRange, a
 
   return (
     <div style={{ width: "250px", padding: "20px", borderRight: "1px solid #ccc", overflowY: "auto" }}>
-      <h2>Incidents</h2>
+      <h2>Filters</h2>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "15px" }}>
         <div>
           <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
@@ -307,7 +313,9 @@ function FilterSidebar({ activeFilters, toggleFilter, dateRange, setDateRange, a
             }}
           >
             <strong>Active Date Filter:</strong> {formatDateForDisplay(startDate)} to {formatDateForDisplay(endDate)}
-            
+            <div style={{ fontSize: "11px", marginTop: "4px", color: "#666" }}>
+              Note: Dates in database are in MM/DD/YYYY format
+            </div>
           </div>
         )}
       </div>

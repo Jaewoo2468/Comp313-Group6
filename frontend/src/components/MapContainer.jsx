@@ -21,7 +21,7 @@ const center = {
   lng: -79.4163,
 }
 
-function MapContainer({ activeFilters, dateRange, setIsLoading }) {
+function MapContainer({ activeFilters = {}, dateRange = { startDate: "", endDate: "" }, setIsLoading = () => {} }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
@@ -46,8 +46,8 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
 
   // Prepare date variables for GraphQL queries
   const dateVariables = {
-    startDate: dateRange.startDate || null,
-    endDate: dateRange.endDate || null,
+    startDate: dateRange?.startDate || null,
+    endDate: dateRange?.endDate || null,
   }
 
   console.log("Date variables for queries:", dateVariables)
@@ -207,6 +207,7 @@ function MapContainer({ activeFilters, dateRange, setIsLoading }) {
   // Function to refetch all active queries with date range
   const refetchAllActiveQueries = useCallback(() => {
     console.log("Refetching all active queries with date range:", dateVariables)
+    setIsLoading(true)
 
     if (activeFilters.fatalAccidents) {
       refetchFatalAccidents({
