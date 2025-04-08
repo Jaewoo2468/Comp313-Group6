@@ -1,0 +1,68 @@
+/* Navbar container */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+}
+
+/* Navbar list */
+.navbar ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  flex-grow: 1; /* Allow the ul to take up remaining space */
+}
+
+/* Navbar list items */
+.navbar ul li {
+  margin: 0 10px;
+}
+
+/* Navbar links */
+.navbar ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+/* Navbar links hover effect */
+.navbar ul li a:hover {
+  color: #ddd;
+}
+
+/* Container for Logout button and UserButton */
+.user-actions-container {
+  margin-left: auto; /* Push the container to the right */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add some space between the Logout button and UserButton */
+}
+
+/* Logout button */
+.user-actions-container button {
+  background-color: #3498db; /* Blue background color */
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px; /* Add padding for better spacing */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+/* Logout button hover effect */
+.user-actions-container button:hover {
+  background-color: #2980b9; /* Darker blue on hover */
+}
+
+/* Logout button active effect */
+.user-actions-container button:active {
+  background-color: #3498db; /* Original blue when clicked */
+  transform: scale(0.98); /* Slightly shrink when clicked */
+}

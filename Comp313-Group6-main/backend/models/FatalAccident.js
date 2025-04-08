@@ -1,0 +1,40 @@
+const mongoose = require("mongoose")
+
+const fatalAccidentSchema = new mongoose.Schema({
+  OBJECTID: Number,
+  INDEX: Number,
+  ACCNUM: Number,
+  DATE: String,
+  TIME: Number,
+  STREET1: String,
+  STREET2: String,
+  ROAD_CLASS: String,
+  DISTRICT: String,
+  LATITUDE: Number,
+  LONGITUDE: Number,
+  TRAFFCTL: String,
+  VISIBILITY: String,
+  LIGHT: String,
+  RDSFCOND: String,
+  ACCLASS: String,
+  IMPACTYPE: String,
+  INVTYPE: String,
+  INVAGE: String,
+  INJURY: String,
+  INITDIR: String,
+  VEHTYPE: String,
+  MANOEUVER: String,
+  DRIVACT: String,
+  DRIVCOND: String,
+  AUTOMOBILE: String,
+  HOOD_158: Number,
+  NEIGHBOURHOOD_158: String,
+  HOOD_140: Number,
+  NEIGHBOURHOOD_140: String,
+  DIVISION: String,
+  x: Number,
+  y: Number,
+})
+
+module.exports = mongoose.model("FatalAccident", fatalAccidentSchema, "FatalAccidents")
+
